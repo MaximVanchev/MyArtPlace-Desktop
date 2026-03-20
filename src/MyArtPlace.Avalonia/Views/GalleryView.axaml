@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MyArtPlace.Avalonia.Views.GalleryView"
+             x:CompileBindings="False">
+    <DockPanel Margin="10">
+        <!-- Filter Panel -->
+        <Border DockPanel.Dock="Top" Background="White" CornerRadius="8" Padding="10" Margin="0,0,0,10"
+                BoxShadow="0 1 4 0 #1a000000">
+            <StackPanel x:Name="FilterPanel" Orientation="Horizontal" Spacing="10"/>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+            <Button Content="Apply Filters" x:Name="BtnApplyFilters" Background="#1565c0" Foreground="White" Padding="10,5"/>
+            <Button Content="Clear Filters" x:Name="BtnClearFilters" Background="#757575" Foreground="White" Padding="10,5"/>
+            <Button Content="Refresh" x:Name="BtnRefresh" Background="#2e7d32" Foreground="White" Padding="10,5"/>
+        </StackPanel>
+
+        <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,5,0,0" Foreground="Gray"/>
+
+        <!-- Art list -->
+        <DataGrid x:Name="ArtGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="Horizontal" CanUserResizeColumns="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="Artist" Binding="{Binding Artist}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
+                <DataGridTextColumn Header="Year" Binding="{Binding YearCreated}" Width="80"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat='{}{0:C0}'}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

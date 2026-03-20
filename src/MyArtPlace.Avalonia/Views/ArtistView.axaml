@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MyArtPlace.Avalonia.Views.ArtistView"
+             x:CompileBindings="False">
+    <DockPanel Margin="10">
+        <TextBlock DockPanel.Dock="Top" Text="Artists" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Filter Panel -->
+        <Border DockPanel.Dock="Top" Background="White" CornerRadius="8" Padding="10" Margin="0,0,0,10"
+                BoxShadow="0 1 4 0 #1a000000">
+            <StackPanel x:Name="FilterPanel" Orientation="Horizontal" Spacing="10"/>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+            <Button Content="Apply Filters" x:Name="BtnApply" Background="#1565c0" Foreground="White" Padding="10,5"/>
+            <Button Content="Clear" x:Name="BtnClear" Background="#757575" Foreground="White" Padding="10,5"/>
+        </StackPanel>
+
+        <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,5,0,0" Foreground="Gray"/>
+
+        <DataGrid x:Name="ArtistGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="Horizontal">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="120"/>
+                <DataGridTextColumn Header="Birth Year" Binding="{Binding BirthYear}" Width="100"/>
+                <DataGridTextColumn Header="Biography" Binding="{Binding Biography}" Width="2*"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

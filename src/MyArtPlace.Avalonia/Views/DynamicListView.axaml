@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MyArtPlace.Avalonia.Views.DynamicListView"
+             x:CompileBindings="False">
+    <DockPanel Margin="10">
+        <TextBlock DockPanel.Dock="Top" Text="Dynamic List Demo (Requirement 5)" FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBlock DockPanel.Dock="Top" Text="Reusable list with configurable columns, selection, and clearing." Foreground="Gray" Margin="0,0,0,10"/>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+            <Button x:Name="BtnShowArt" Content="Show Art Pieces" Background="#1565c0" Foreground="White" Padding="10,5"/>
+            <Button x:Name="BtnShowArtists" Content="Show Artists" Background="#1565c0" Foreground="White" Padding="10,5"/>
+            <Button x:Name="BtnChangeColumns" Content="Change Columns" Background="#757575" Foreground="White" Padding="10,5"/>
+            <Button x:Name="BtnClear" Content="Clear" Background="#c62828" Foreground="White" Padding="10,5"/>
+        </StackPanel>
+
+        <TextBlock x:Name="TxtInfo" DockPanel.Dock="Top" Foreground="#1565c0" Margin="0,0,0,5"/>
+        <TextBlock x:Name="TxtSelected" DockPanel.Dock="Bottom" Foreground="Green" Margin="0,5,0,0" TextWrapping="Wrap"/>
+
+        <DataGrid x:Name="DynGrid" AutoGenerateColumns="False" IsReadOnly="True" 
+                  GridLinesVisibility="Horizontal" SelectionChanged="OnGridSelectionChanged"/>
+    </DockPanel>
+</UserControl>
