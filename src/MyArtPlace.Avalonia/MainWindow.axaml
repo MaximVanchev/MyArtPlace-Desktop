@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyArtPlace.Avalonia.Views"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+        x:Class="MyArtPlace.Avalonia.MainWindow"
+        Title="MyArtPlace - Desktop" Width="1000" Height="700">
+
+    <DockPanel>
+        <!-- Header -->
+        <Border DockPanel.Dock="Top" Background="#1a1a2e" Padding="15">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <TextBlock Text="🎨 MyArtPlace" Foreground="White" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock x:Name="DbStatusText" Foreground="#90caf9" VerticalAlignment="Center" FontSize="12"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Tab control for views -->
+        <TabControl Margin="10">
+            <TabItem Header="Gallery">
+                <local:GalleryView/>
+            </TabItem>
+            <TabItem Header="Add / Edit Art">
+                <local:ArtEditorView/>
+            </TabItem>
+            <TabItem Header="Artists">
+                <local:ArtistView/>
+            </TabItem>
+            <TabItem Header="Dynamic List">
+                <local:DynamicListView/>
+            </TabItem>
+            <TabItem Header="Database Settings">
+                <local:DatabaseSettingsView/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
