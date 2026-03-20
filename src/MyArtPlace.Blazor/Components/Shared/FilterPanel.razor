@@ -1,0 +1,52 @@
+@* Reusable filter panel component - Requirement 4 *@
+
+<div class="filter-panel">
+    @foreach (var filter in Filters)
+    {
+        <div class="filter-field">
+            <label>@filter.DisplayName</label>
+            @if (filter.IsEnum && filter.EnumValues is not null)
+            {
+                <select value="@(filter.Value?.ToString() ?? "")" @onchange="e => OnFilterChanged(filter, e.Value?.ToString())">
+                    <option value="">-- All --</option>
+                    @foreach (var val in filter.EnumValues)
+                    {
+                        <option value="@val">@val</option>
+                    }
+                </select>
+            }
+            else if (filter.PropertyType == typeof(int) || filter.PropertyType == typeof(decimal) || filter.PropertyType == typeof(double))
+            {
+                <input type="number" value="@(filter.Value?.ToString() ?? "")" 
+                       @onchange="e => OnFilterChanged(filter, e.Value?.ToString())"
+                       placeholder="@($"Enter {filter.DisplayName.ToLower()}...")" />
+            }
+            else
+            {
+                <input type="text" value="@(filter.Value?.ToString() ?? "")" 
+                       @oninput="e => OnFilterChanged(filter, e.Value?.ToString())"
+                       placeholder="@($"Search {filter.DisplayName.ToLower()}...")" />
+            }
+        </div>
+    }
+    <div class="filter-field" style="align-self: flex-end;">
+        <button class="btn btn-secondary btn-sm" @onclick="ClearFilters">Clear Filters</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<FilterField> Filters { get; set; } = new();
+    [Parameter] public EventCallback OnFiltersChanged { get; set; }
+
+    private async Task OnFilterChanged(FilterField filter, string? value)
+    {
+        filter.Value = string.IsNullOrWhiteSpace(value) ? null : value;
+        await OnFiltersChanged.InvokeAsync();
+    }
+
+    private async Task ClearFilters()
+    {
+        foreach (var f in Filters) f.Value = null;
+        await OnFiltersChanged.InvokeAsync();
+    }
+}

@@ -1,0 +1,41 @@
+@* Reusable dynamic list component - Requirement 5 *@
+
+@if (ViewModel.Columns.Count > 0)
+{
+    <table class="dynamic-table">
+        <thead>
+            <tr>
+                @foreach (var col in ViewModel.Columns)
+                {
+                    <th>@col.Header</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in ViewModel.Rows)
+            {
+                <tr class="@(row == ViewModel.SelectedRow ? "selected" : "")" @onclick="() => SelectRow(row)">
+                    @foreach (var val in row.DisplayValues)
+                    {
+                        <td>@val</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p style="color: #999;">No data to display.</p>
+}
+
+@code {
+    [Parameter] public DynamicListViewModel ViewModel { get; set; } = new();
+    [Parameter] public EventCallback<DynamicRow> OnRowSelected { get; set; }
+
+    private async Task SelectRow(DynamicRow row)
+    {
+        ViewModel.SelectedRow = row;
+        await OnRowSelected.InvokeAsync(row);
+    }
+}
