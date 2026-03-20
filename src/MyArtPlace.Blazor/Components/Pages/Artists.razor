@@ -1,0 +1,68 @@
+@page "/artists"
+@rendermode InteractiveServer
+@inject ArtistListViewModel VM
+@using MyArtPlace.Blazor.Components.Shared
+
+<PageTitle>Artists - MyArtPlace</PageTitle>
+
+<h1>Artists</h1>
+
+@* Requirement 4d: Reusable filter controls demonstrated for SECOND table (Artist) *@
+<FilterPanel Filters="_filters" OnFiltersChanged="ApplyFilters" />
+
+@if (VM.IsLoading)
+{
+    <div class="loading">Loading artists...</div>
+}
+else if (VM.ErrorMessage is not null)
+{
+    <div class="alert alert-error">@VM.ErrorMessage</div>
+}
+else if (_filtered.Count == 0)
+{
+    <div class="alert alert-info">No artists found.</div>
+}
+else
+{
+    <table class="dynamic-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Birth Year</th>
+                <th>Biography</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in _filtered)
+            {
+                <tr>
+                    <td><strong>@a.Name</strong></td>
+                    <td>@a.Country</td>
+                    <td>@a.BirthYear</td>
+                    <td>@(a.Biography?.Length > 60 ? a.Biography[..60] + "..." : a.Biography)</td>
+                    <td>@a.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<FilterField> _filters = new();
+    private List<Artist> _filtered = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Filters for Artist table (req 4d: demonstrated for table 2)
+        _filters = FilterBuilder.BuildFilters<Artist>("Name", "Country", "BirthYear");
+        await VM.LoadArtistsAsync();
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        _filtered = FilterBuilder.ApplyFilters(VM.Artists, _filters);
+    }
+}

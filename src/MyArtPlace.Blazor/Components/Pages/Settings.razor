@@ -1,0 +1,39 @@
+@page "/settings"
+@rendermode InteractiveServer
+@inject DatabaseSwitchViewModel VM
+
+<PageTitle>Settings - MyArtPlace</PageTitle>
+
+<h1>Database Settings</h1>
+<p style="color: #666;">Switch between PostgreSQL and MySQL databases (Requirement 3: two different DBMS).</p>
+
+<div style="background: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 500px;">
+    <h3>Current Database Provider</h3>
+    <div class="db-switcher" style="margin-bottom: 1rem;">
+        @foreach (var provider in VM.AvailableProviders)
+        {
+            <button class="db-btn @(provider == VM.CurrentProvider ? "active" : "")"
+                    @onclick="() => Switch(provider)">
+                @provider
+            </button>
+        }
+    </div>
+
+    @if (VM.StatusMessage is not null)
+    {
+        <div class="alert alert-success">@VM.StatusMessage</div>
+    }
+
+    <p style="font-size: 0.85rem; color: #666;">
+        Both databases contain the same seeded data. Switching will cause all
+        subsequent queries to use the selected database provider.
+    </p>
+</div>
+
+@code {
+    private void Switch(DatabaseProvider provider)
+    {
+        VM.SwitchProviderCommand.Execute(provider);
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,92 @@
+@page "/add"
+@page "/edit/{Id:int}"
+@rendermode InteractiveServer
+@inject ArtEditorViewModel VM
+
+<PageTitle>@(VM.IsEditing ? "Edit Art" : "Add Art") - MyArtPlace</PageTitle>
+
+<div class="toolbar">
+    <h1>@(VM.IsEditing ? "Edit Art Piece" : "Add New Art Piece")</h1>
+    <a href="/" class="btn btn-secondary" style="margin-left: auto;">Back to Gallery</a>
+</div>
+
+@if (VM.ErrorMessage is not null)
+{
+    <div class="alert alert-error">@VM.ErrorMessage</div>
+}
+@if (VM.SuccessMessage is not null)
+{
+    <div class="alert alert-success">@VM.SuccessMessage</div>
+}
+
+<div style="background: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 600px;">
+    <div class="form-group">
+        <label>Title *</label>
+        <input type="text" @bind="VM.Title" />
+    </div>
+    <div class="form-group">
+        <label>Artist *</label>
+        <input type="text" @bind="VM.Artist" />
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <select @bind="VM.Category">
+            @foreach (var cat in VM.Categories)
+            {
+                <option value="@cat">@cat</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Year Created</label>
+        <input type="number" @bind="VM.YearCreated" />
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea @bind="VM.Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Image URL</label>
+        <input type="text" @bind="VM.ImageUrl" placeholder="https://example.com/image.jpg" />
+    </div>
+    <div class="form-group">
+        <label>Price ($)</label>
+        <input type="number" step="0.01" @bind="VM.Price" />
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+        <button class="btn btn-success" @onclick="VM.SaveCommand.ExecuteAsync">
+            @(VM.IsEditing ? "Update" : "Save")
+        </button>
+        @if (VM.IsEditing)
+        {
+            <button class="btn btn-danger" @onclick="DeleteArt">Delete</button>
+        }
+        <a href="/" class="btn btn-secondary">Cancel</a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    [Inject] private IRepository<ArtPiece> ArtRepo { get; set; } = default!;
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private async Task DeleteArt()
+    {
+        await ArtRepo.DeleteAsync(VM.Id);
+        Nav.NavigateTo("/");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            var art = await ArtRepo.GetByIdAsync(Id.Value);
+            if (art is not null)
+                VM.LoadForEdit(art);
+        }
+        else
+        {
+            VM.LoadForCreate();
+        }
+    }
+}

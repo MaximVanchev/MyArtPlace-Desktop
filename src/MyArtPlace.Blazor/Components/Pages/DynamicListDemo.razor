@@ -1,0 +1,117 @@
+@page "/dynamic-list"
+@rendermode InteractiveServer
+@inject IRepository<ArtPiece> ArtRepo
+@inject IRepository<Artist> ArtistRepo
+@using MyArtPlace.Blazor.Components.Shared
+
+<PageTitle>Dynamic List - MyArtPlace</PageTitle>
+
+<h1>Dynamic List Demo</h1>
+<p style="color: #666;">Demonstrates the reusable dynamic list component (Requirement 5).</p>
+
+<div class="toolbar">
+    <button class="btn btn-primary" @onclick="ShowArtPieces">Show Art Pieces</button>
+    <button class="btn btn-primary" @onclick="ShowArtists">Show Artists</button>
+    <button class="btn btn-secondary" @onclick="ChangeColumnsDemo">Change Columns</button>
+    <button class="btn btn-danger" @onclick="ClearList">Clear List</button>
+</div>
+
+@if (!string.IsNullOrEmpty(_currentTable))
+{
+    <div class="alert alert-info">
+        Showing: <strong>@_currentTable</strong> | Columns: @string.Join(", ", _dynList.Columns.Select(c => c.Header))
+    </div>
+}
+
+<DynamicListPanel ViewModel="_dynList" OnRowSelected="OnRowSelected" />
+
+@if (_selectedInfo is not null)
+{
+    <div class="alert alert-success" style="margin-top: 1rem;">
+        <strong>Selected full object:</strong> @_selectedInfo
+    </div>
+}
+
+@code {
+    private DynamicListViewModel _dynList = new();
+    private string? _selectedInfo;
+    private string _currentTable = "";
+    private bool _artColumnsExpanded;
+    private bool _artistColumnsExpanded;
+
+    // Req 5a, 5b, 5f: Load ArtPiece list with specific columns
+    private async Task ShowArtPieces()
+    {
+        var items = await ArtRepo.GetAllAsync();
+        _dynList.SetData(items, "Title", "Artist", "Category", "Price");
+        _currentTable = "Art Pieces";
+        _selectedInfo = null;
+        _artColumnsExpanded = false;
+    }
+
+    // Req 5a, 5b, 5f: Load Artist list with specific columns (second table)
+    private async Task ShowArtists()
+    {
+        var items = await ArtistRepo.GetAllAsync();
+        _dynList.SetData(items, "Name", "Country", "BirthYear");
+        _currentTable = "Artists";
+        _selectedInfo = null;
+        _artistColumnsExpanded = false;
+    }
+
+    // Req 5c: Dynamically change which columns are displayed
+    private void ChangeColumnsDemo()
+    {
+        if (_currentTable == "Art Pieces")
+        {
+            if (!_artColumnsExpanded)
+            {
+                _dynList.ChangeColumns<ArtPiece>("Title", "Artist", "Category", "YearCreated", "Price", "Description");
+                _artColumnsExpanded = true;
+            }
+            else
+            {
+                _dynList.ChangeColumns<ArtPiece>("Title", "Price");
+                _artColumnsExpanded = false;
+            }
+        }
+        else if (_currentTable == "Artists")
+        {
+            if (!_artistColumnsExpanded)
+            {
+                _dynList.ChangeColumns<Artist>("Name", "Country", "BirthYear", "Biography", "Email");
+                _artistColumnsExpanded = true;
+            }
+            else
+            {
+                _dynList.ChangeColumns<Artist>("Name", "Email");
+                _artistColumnsExpanded = false;
+            }
+        }
+    }
+
+    // Req 5d: Selected row returns the full object
+    private void OnRowSelected(DynamicRow row)
+    {
+        if (_currentTable == "Art Pieces")
+        {
+            var art = _dynList.GetSelectedObject<ArtPiece>();
+            if (art is not null)
+                _selectedInfo = $"ArtPiece: Id={art.Id}, Title='{art.Title}', Artist='{art.Artist}', Category={art.Category}, Year={art.YearCreated}, Price={art.Price}";
+        }
+        else if (_currentTable == "Artists")
+        {
+            var artist = _dynList.GetSelectedObject<Artist>();
+            if (artist is not null)
+                _selectedInfo = $"Artist: Id={artist.Id}, Name='{artist.Name}', Country='{artist.Country}', BirthYear={artist.BirthYear}, Bio='{artist.Biography}'";
+        }
+    }
+
+    // Req 5e: Clear and allow setting new list
+    private void ClearList()
+    {
+        _dynList.Clear();
+        _currentTable = "";
+        _selectedInfo = null;
+    }
+}

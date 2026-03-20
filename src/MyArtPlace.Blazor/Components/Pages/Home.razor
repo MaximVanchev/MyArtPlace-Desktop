@@ -1,0 +1,90 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject ArtGalleryViewModel VM
+@using MyArtPlace.Blazor.Components.Shared
+
+<PageTitle>MyArtPlace - Gallery</PageTitle>
+
+<div class="toolbar">
+    <h1>Art Gallery</h1>
+    <a href="/add" class="btn btn-primary" style="margin-left: auto;">+ Add New Art</a>
+</div>
+
+@* Requirement 4: Reusable filter controls for ArtPiece table *@
+<FilterPanel Filters="_filters" OnFiltersChanged="ApplyFilters" />
+
+@if (VM.IsLoading)
+{
+    <div class="loading">Loading art pieces...</div>
+}
+else if (VM.ErrorMessage is not null)
+{
+    <div class="alert alert-error">@VM.ErrorMessage</div>
+}
+else if (_filteredArt.Count == 0)
+{
+    <div class="alert alert-info">No art pieces found. Try adjusting your filters or add some art!</div>
+}
+else
+{
+    <div class="art-grid">
+        @foreach (var art in _filteredArt)
+        {
+            <div class="art-card" @onclick="() => ViewArt(art)">
+                @if (!string.IsNullOrEmpty(art.ImageUrl))
+                {
+                    <img src="@art.ImageUrl" alt="@art.Title" />
+                }
+                else
+                {
+                    <div class="no-image">🎨</div>
+                }
+                <div class="art-card-body">
+                    <h3>@art.Title</h3>
+                    <p>@art.Artist</p>
+                    <span class="category-badge">@art.Category</span>
+                    @if (art.YearCreated.HasValue)
+                    {
+                        <span class="category-badge">@art.YearCreated</span>
+                    }
+                    @if (art.Price.HasValue)
+                    {
+                        <p class="price">$@art.Price.Value.ToString("N0")</p>
+                    }
+                    <button class="btn btn-danger btn-sm" style="margin-top: 0.5rem;" @onclick="() => DeleteArt(art)" @onclick:stopPropagation="true">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private List<FilterField> _filters = new();
+    private List<ArtPiece> _filteredArt = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Build reusable filters for ArtPiece (req 4d: demonstrated for table 1)
+        _filters = FilterBuilder.BuildFilters<ArtPiece>("Title", "Artist", "Category", "YearCreated");
+        await VM.LoadArtAsync();
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        _filteredArt = FilterBuilder.ApplyFilters(VM.ArtPieces, _filters);
+    }
+
+    private void ViewArt(ArtPiece art)
+    {
+        Nav.NavigateTo($"/edit/{art.Id}");
+    }
+
+    private async Task DeleteArt(ArtPiece art)
+    {
+        await VM.DeleteArtAsync(art);
+        ApplyFilters();
+    }
+}
