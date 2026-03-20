@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MyArtPlace.Avalonia/MyArtPlace.Avalonia.csproj" />
+    <Project Path="src/MyArtPlace.Blazor/MyArtPlace.Blazor.csproj" />
+    <Project Path="src/MyArtPlace.Core/MyArtPlace.Core.csproj" />
+    <Project Path="src/MyArtPlace.Data/MyArtPlace.Data.csproj" />
+    <Project Path="src/MyArtPlace.ViewModels/MyArtPlace.ViewModels.csproj" />
+  </Folder>
+</Solution>
