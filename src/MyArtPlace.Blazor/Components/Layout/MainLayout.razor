@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="app-container">
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>🎨 MyArtPlace</h2>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Gallery</a></li>
+            <li><a href="/add">Add Art</a></li>
+            <li><a href="/artists">Artists</a></li>
+            <li><a href="/dynamic-list">Dynamic List</a></li>
+            <li><a href="/settings">Database Settings</a></li>
+        </ul>
+    </nav>
+    <main class="main-content">
+        @Body
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

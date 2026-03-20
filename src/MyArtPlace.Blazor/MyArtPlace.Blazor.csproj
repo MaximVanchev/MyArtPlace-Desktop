@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyArtPlace.Core\MyArtPlace.Core.csproj" />
+    <ProjectReference Include="..\MyArtPlace.Data\MyArtPlace.Data.csproj" />
+    <ProjectReference Include="..\MyArtPlace.ViewModels\MyArtPlace.ViewModels.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+</Project>
