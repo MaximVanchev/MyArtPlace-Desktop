@@ -2,6 +2,7 @@
 @page "/edit/{Id:int}"
 @rendermode InteractiveServer
 @inject ArtEditorViewModel VM
+@using Microsoft.AspNetCore.Components.Forms
 
 <PageTitle>@(VM.IsEditing ? "Edit Art" : "Add Art") - MyArtPlace</PageTitle>
 
@@ -50,6 +51,31 @@
         <input type="text" @bind="VM.ImageUrl" placeholder="https://example.com/image.jpg" />
     </div>
     <div class="form-group">
+        <label>Image (drag &amp; drop or click to upload)</label>
+        <div class="drop-zone @(_isDragOver ? "drop-zone-active" : "")"
+             ondragover="event.preventDefault();"
+             @ondragenter="OnDragEnter"
+             @ondragleave="OnDragLeave"
+             @ondrop="OnDragLeave">
+            @if (VM.ImagePreviewUrl is not null)
+            {
+                <div class="drop-zone-preview">
+                    <img src="@VM.ImagePreviewUrl" alt="Preview" />
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="RemoveImage">Remove</button>
+                </div>
+            }
+            else
+            {
+                <div class="drop-zone-prompt">
+                    <span style="font-size: 2rem;">📁</span>
+                    <p>Drag &amp; drop an image here, or click to browse</p>
+                </div>
+            }
+            <InputFile OnChange="OnFileSelected" accept="image/*"
+                       style="position: absolute; inset: 0; opacity: 0; cursor: pointer;" />
+        </div>
+    </div>
+    <div class="form-group">
         <label>Price ($)</label>
         <input type="number" step="0.01" @bind="VM.Price" />
     </div>
@@ -69,6 +95,36 @@
     [Parameter] public int? Id { get; set; }
     [Inject] private IRepository<ArtPiece> ArtRepo { get; set; } = default!;
     [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private bool _isDragOver;
+    private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
+
+    private void OnDragEnter() => _isDragOver = true;
+    private void OnDragLeave() => _isDragOver = false;
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        _isDragOver = false;
+        var file = e.File;
+        if (file is null) return;
+
+        if (!file.ContentType.StartsWith("image/"))
+        {
+            VM.ErrorMessage = "Only image files are allowed.";
+            return;
+        }
+        if (file.Size > MaxFileSize)
+        {
+            VM.ErrorMessage = "Image must be smaller than 5 MB.";
+            return;
+        }
+
+        using var ms = new MemoryStream();
+        await file.OpenReadStream(MaxFileSize).CopyToAsync(ms);
+        VM.SetImage(ms.ToArray(), file.ContentType);
+    }
+
+    private void RemoveImage() => VM.ClearImage();
 
     private async Task DeleteArt()
     {

@@ -31,7 +31,11 @@ else
         @foreach (var art in _filteredArt)
         {
             <div class="art-card" @onclick="() => ViewArt(art)">
-                @if (!string.IsNullOrEmpty(art.ImageUrl))
+                @if (art.ImageData is { Length: > 0 } && !string.IsNullOrEmpty(art.ImageContentType))
+                {
+                    <img src="data:@(art.ImageContentType);base64,@Convert.ToBase64String(art.ImageData)" alt="@art.Title" />
+                }
+                else if (!string.IsNullOrEmpty(art.ImageUrl))
                 {
                     <img src="@art.ImageUrl" alt="@art.Title" />
                 }

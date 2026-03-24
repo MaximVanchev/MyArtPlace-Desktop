@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Artist).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.ImageContentType).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Artist>(entity =>

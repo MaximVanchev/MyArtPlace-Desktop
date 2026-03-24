@@ -25,6 +25,23 @@
             <TextBlock Text="Image URL" FontWeight="SemiBold"/>
             <TextBox x:Name="TxtImageUrl" Watermark="https://example.com/image.jpg"/>
 
+            <TextBlock Text="Image (drag &amp; drop a file here)" FontWeight="SemiBold"/>
+            <Border x:Name="DropZone" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="2"
+                    CornerRadius="8" MinHeight="120" Padding="10"
+                    DragDrop.AllowDrop="True">
+                <Panel>
+                    <StackPanel x:Name="DropPrompt" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+                        <TextBlock Text="📁" FontSize="28" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Drag &amp; drop an image file here" Foreground="Gray" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel x:Name="ImagePreviewPanel" IsVisible="False" HorizontalAlignment="Center" Spacing="5">
+                        <Image x:Name="ImgPreview" MaxHeight="180" MaxWidth="400" Stretch="Uniform"/>
+                        <Button x:Name="BtnRemoveImage" Content="Remove Image" Background="#c62828" Foreground="White"
+                                Padding="10,4" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Panel>
+            </Border>
+
             <TextBlock Text="Price ($)" FontWeight="SemiBold"/>
             <TextBox x:Name="TxtPrice" Watermark="e.g. 1000"/>
 

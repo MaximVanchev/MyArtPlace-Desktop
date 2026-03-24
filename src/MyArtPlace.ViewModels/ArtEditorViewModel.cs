@@ -32,6 +32,15 @@ public partial class ArtEditorViewModel : ObservableObject
     private string? _imageUrl;
 
     [ObservableProperty]
+    private byte[]? _imageData;
+
+    [ObservableProperty]
+    private string? _imageContentType;
+
+    [ObservableProperty]
+    private string? _imagePreviewUrl;
+
+    [ObservableProperty]
     private decimal? _price;
 
     [ObservableProperty]
@@ -59,6 +68,9 @@ public partial class ArtEditorViewModel : ObservableObject
         Category = art.Category;
         YearCreated = art.YearCreated;
         ImageUrl = art.ImageUrl;
+        ImageData = art.ImageData;
+        ImageContentType = art.ImageContentType;
+        ImagePreviewUrl = BuildImagePreviewUrl(art.ImageData, art.ImageContentType, art.ImageUrl);
         Price = art.Price;
         IsEditing = true;
         ErrorMessage = null;
@@ -74,6 +86,9 @@ public partial class ArtEditorViewModel : ObservableObject
         Category = ArtCategory.Painting;
         YearCreated = null;
         ImageUrl = null;
+        ImageData = null;
+        ImageContentType = null;
+        ImagePreviewUrl = null;
         Price = null;
         IsEditing = false;
         ErrorMessage = null;
@@ -108,6 +123,8 @@ public partial class ArtEditorViewModel : ObservableObject
                 Category = Category,
                 YearCreated = YearCreated,
                 ImageUrl = ImageUrl?.Trim(),
+                ImageData = ImageData,
+                ImageContentType = ImageContentType,
                 Price = Price,
                 DateAdded = IsEditing ? DateTime.UtcNow : DateTime.UtcNow
             };
@@ -129,5 +146,28 @@ public partial class ArtEditorViewModel : ObservableObject
         {
             ErrorMessage = $"Save failed: {ex.Message}";
         }
+    }
+
+    public void SetImage(byte[] data, string contentType)
+    {
+        ImageData = data;
+        ImageContentType = contentType;
+        ImagePreviewUrl = $"data:{contentType};base64,{Convert.ToBase64String(data)}";
+    }
+
+    public void ClearImage()
+    {
+        ImageData = null;
+        ImageContentType = null;
+        ImagePreviewUrl = null;
+    }
+
+    private static string? BuildImagePreviewUrl(byte[]? data, string? contentType, string? imageUrl)
+    {
+        if (data is { Length: > 0 } && !string.IsNullOrEmpty(contentType))
+            return $"data:{contentType};base64,{Convert.ToBase64String(data)}";
+        if (!string.IsNullOrEmpty(imageUrl))
+            return imageUrl;
+        return null;
     }
 }

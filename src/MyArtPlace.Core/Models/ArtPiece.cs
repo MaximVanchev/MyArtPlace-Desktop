@@ -25,6 +25,11 @@ public class ArtPiece
     [MaxLength(500)]
     public string? ImageUrl { get; set; }
 
+    public byte[]? ImageData { get; set; }
+
+    [MaxLength(100)]
+    public string? ImageContentType { get; set; }
+
     public decimal? Price { get; set; }
 
     public DateTime DateAdded { get; set; } = DateTime.UtcNow;
