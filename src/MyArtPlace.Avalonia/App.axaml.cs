@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -35,8 +36,16 @@ public partial class App : Application
         ArtRepo = new Repository<ArtPiece>(DbFactory);
         ArtistRepo = new Repository<Artist>(DbFactory);
 
-        // Initialize both databases
-        await DatabaseInitializer.InitializeAsync(DbFactory, DbProviderService);
+        try
+        {
+            // Initialize both databases
+            await DatabaseInitializer.InitializeAsync(DbFactory, DbProviderService);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Database initialization failed: {ex.Message}");
+            Console.WriteLine("The app will start without pre-initialized databases.");
+        }
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
