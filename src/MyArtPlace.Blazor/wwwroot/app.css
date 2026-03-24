@@ -101,11 +101,14 @@ h1:focus { outline: none; }
 
 /* Dynamic table */
 .dynamic-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.dynamic-table th { background: #1a1a2e; color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.85rem; }
+.dynamic-table th { background: #1a1a2e; color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.85rem; white-space: nowrap; }
 .dynamic-table td { padding: 0.6rem 1rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
 .dynamic-table tr:hover { background: #f0f4ff; }
 .dynamic-table tr.selected { background: #bbdefb; }
 .dynamic-table tr { cursor: pointer; }
+
+/* Table scroll wrapper for mobile */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* Toolbar */
 .toolbar { display: flex; gap: 0.75rem; margin-bottom: 1.2rem; align-items: center; flex-wrap: wrap; }
@@ -169,4 +172,82 @@ h1:focus { outline: none; }
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+    h1 { font-size: 1.4rem; }
+
+    /* Art grid: single column on small screens */
+    .art-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Toolbar: stack vertically */
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .toolbar a, .toolbar button {
+        text-align: center;
+    }
+
+    /* Filter panel: stack vertically */
+    .filter-panel {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .filter-field {
+        min-width: 0;
+        width: 100%;
+    }
+
+    /* Buttons: larger touch targets */
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        min-height: 44px;
+    }
+    .btn-sm {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.85rem;
+        min-height: 40px;
+    }
+
+    /* Forms: full width */
+    .form-group input, .form-group select, .form-group textarea {
+        font-size: 1rem;
+        padding: 0.6rem;
+    }
+
+    /* DB switcher: wrap */
+    .db-switcher {
+        flex-wrap: wrap;
+    }
+    .db-switcher .db-btn {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+        padding: 0.6rem 1rem;
+        min-height: 44px;
+    }
+
+    /* Drop zone: easier to tap */
+    .drop-zone {
+        min-height: 120px;
+        padding: 1rem;
+    }
+
+    /* Alerts: more readable */
+    .alert { font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+    .art-card img, .no-image {
+        height: 160px;
+    }
+
+    .art-card-body h3 { font-size: 1rem; }
+    .art-card-body p { font-size: 0.85rem; }
 }

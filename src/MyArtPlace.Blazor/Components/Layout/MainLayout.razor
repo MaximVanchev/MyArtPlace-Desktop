@@ -1,19 +1,23 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="app-container">
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-checkbox" />
+    <label for="sidebar-toggle" class="sidebar-overlay"></label>
     <nav class="sidebar">
         <div class="sidebar-header">
             <h2>🎨 MyArtPlace</h2>
+            <label for="sidebar-toggle" class="sidebar-close">✕</label>
         </div>
         <ul class="nav-menu">
-            <li><a href="/">Gallery</a></li>
-            <li><a href="/add">Add Art</a></li>
-            <li><a href="/artists">Artists</a></li>
-            <li><a href="/dynamic-list">Dynamic List</a></li>
-            <li><a href="/settings">Database Settings</a></li>
+            <li><a href="/" onclick="document.getElementById('sidebar-toggle').checked=false">Gallery</a></li>
+            <li><a href="/add" onclick="document.getElementById('sidebar-toggle').checked=false">Add Art</a></li>
+            <li><a href="/artists" onclick="document.getElementById('sidebar-toggle').checked=false">Artists</a></li>
+            <li><a href="/dynamic-list" onclick="document.getElementById('sidebar-toggle').checked=false">Dynamic List</a></li>
+            <li><a href="/settings" onclick="document.getElementById('sidebar-toggle').checked=false">Database Settings</a></li>
         </ul>
     </nav>
     <main class="main-content">
+        <label for="sidebar-toggle" class="hamburger-btn">☰</label>
         @Body
     </main>
 </div>
