@@ -207,6 +207,40 @@ A Blazor Server application with Interactive Server rendering mode.
 - **Content Area**: Flexible light panel with scrolling
 - **Art Grid**: CSS Grid responsive cards
 
+#### Mobile Responsive Design
+
+The Blazor web UI is fully responsive using CSS media queries and a pure-CSS hamburger menu (no JavaScript framework required).
+
+**Breakpoints**
+
+| Breakpoint | Behaviour |
+|---|---|
+| `> 768px` | Desktop layout — fixed sidebar, multi-column art grid |
+| `≤ 768px` | Mobile layout — collapsible sidebar drawer, single-column grid, stacked filters/toolbar |
+| `≤ 480px` | Small phone — reduced card image height, smaller typography |
+
+**Layout (MainLayout.razor + scoped CSS)**
+
+- Hidden `<input type="checkbox">` drives sidebar open/close state (CSS-only, no JS).
+- `☰` hamburger button appears on mobile to toggle the sidebar.
+- Semi-transparent overlay (`rgba(0,0,0,0.4)`) behind the drawer; tapping it closes the sidebar.
+- `✕` close button added inside the sidebar header on mobile.
+- Sidebar slides in from the left with a `0.25s ease` CSS transition.
+- Navigation links auto-close the sidebar on click via inline `onclick`.
+
+**Component Adaptations (app.css @media rules)**
+
+| Component | Mobile Adaptation |
+|---|---|
+| Art grid | Single-column (`1fr`) layout |
+| Toolbar | Vertical stack with full-width items |
+| Filter panel | Vertical stack, full-width fields |
+| Buttons | Larger touch targets (`min-height: 44px`) |
+| Form inputs | Increased font size and padding |
+| DB switcher | Wrapping flex, each button `min-width: 120px` |
+| Tables | Horizontal scroll wrapper (`.table-scroll`) |
+| Drop zone | Reduced min-height for easier tap access |
+
 ---
 
 ### 4.5 MyArtPlace.Avalonia — Desktop UI
@@ -298,6 +332,7 @@ The application allows switching between PostgreSQL and MySQL at runtime via the
 | 5d | Dynamic list: return full object | `DynamicListViewModel.GetSelectedObject<T>()` | ✅ |
 | 5e | Dynamic list: clear | `DynamicListViewModel.Clear()` | ✅ |
 | 5f | Dynamic list on 2 tables | DynamicListDemo page loads ArtPieces and Artists | ✅ |
+| 6 | Mobile responsive web UI | CSS media queries (768px/480px), hamburger sidebar, single-column grid, touch-friendly controls | ✅ |
 
 ---
 

@@ -12,6 +12,7 @@ A cross-platform art gallery management application built with C# and the **MVVM
 - **Dual database support**: PostgreSQL and MySQL with runtime switching
 - **Reusable filter system**: Type-aware filters (text/number/dropdown) auto-generated from model properties
 - **Reusable dynamic list**: Load any entity, switch columns, select rows, retrieve full objects
+- **Mobile responsive web UI**: Hamburger menu, collapsible sidebar, adaptive card grid, touch-friendly controls
 - **Seed data**: Pre-loaded with famous artists and artworks
 
 ---
